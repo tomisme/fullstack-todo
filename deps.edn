@@ -1,0 +1,5 @@
+{:paths ["src"]
+ :aliases
+ {:server {:extra-deps {
+                        org.postgresql/postgresql {:mvn/version "42.2.10"}
+                        seancorfield/next.jdbc {:mvn/version "1.1.588"}}}}}
