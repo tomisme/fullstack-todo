@@ -20,3 +20,9 @@ fullstack-todo_db_1 exited with code 1
 Added some env variables to docker-compose, success!
 
 Started playing around in `todo.server`, created an items table with `jdbc/execute!` and added some items. `jdbc.sql` has some helpers for CRUD operations, that seems a good middle ground between building SQL strings and pulling in a dedicated library like HoneySQL or HugSQL.
+
+Next up we need an HTTP server. I've used yada and other libraries from the JUXT stack for a large app in the past but that seems overkill. No need for Swagger or anything, we're only going to have a few simple routes. Let's just use plain Ring with its bundled Jetty adaptor. For routes, no need for something bi-directional, let's just use Compojure.
+
+Now we've got a simple Jetty server going, with wrap-reload so we can make changes to the routes without reloading the server.
+
+Now we need a way to communicate data to and from the client. We're going to be using Clojure on both the front and back ends so it would be nice to not have to convert to/from JSON. Transit seems overkill, let's just print/read EDN.

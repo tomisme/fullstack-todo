@@ -1,5 +1,17 @@
-{:paths ["src"]
+{:paths ["src" "resources"]
  :aliases
- {:server {:extra-deps {
+ {:client {:extra-paths ["target"]
+           :main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]
+           :extra-deps {
+                        funcool/promesa {:mvn/version "4.0.0"}
+                        com.bhauman/figwheel-main {:mvn/version "0.2.11"}
+                        reagent/reagent {:mvn/version "1.0.0-alpha2"}}}
+  :server {:extra-deps {
+                        org.clojure/clojure {:mvn/version "1.10.1"}
+                        ring/ring-core {:mvn/version "1.8.1"}
+                        ring/ring-devel {:mvn/version "1.8.1"}
+                        ring/ring-jetty-adapter {:mvn/version "1.8.1"}
+                        ring-cors/ring-cors {:mvn/version "0.1.13"}
+                        compojure/compojure {:mvn/version "1.6.2"}
                         org.postgresql/postgresql {:mvn/version "42.2.10"}
                         seancorfield/next.jdbc {:mvn/version "1.1.588"}}}}}
