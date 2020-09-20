@@ -1,4 +1,13 @@
-## todo app
+## fullstack todo app
+
+### Running
+
+  - `docker-compose up`
+  - `clj -A:server`
+  - `clj -A:client`
+    - clojurescript app only has a dev build at the moment
+
+### Work Log
 
 First step, setup postgres, start a socket REPL and connect to it from my IDE (Atom w/ Chlorine).
 
