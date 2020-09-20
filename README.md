@@ -3,9 +3,12 @@
 ### Running
 
   - `docker-compose up`
+    - runs postgres
   - `clj -A:server`
-  - `clj -A:client`
-    - clojurescript app only has a dev build at the moment
+    - server should be reachable at `localhost:8081`
+  - `clj -A:client:client-dev`
+    - figwheel should open `localhost:9500`
+    - client only has a dev build at the moment
 
 ### Work Log
 

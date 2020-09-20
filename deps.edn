@@ -1,15 +1,15 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}}
  :aliases
- {:client {:extra-paths ["target"]
-           :main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]
-           :extra-deps {
-                        funcool/promesa {:mvn/version "4.0.0"}
-                        com.bhauman/figwheel-main {:mvn/version "0.2.11"}
+ {:client {:extra-deps {funcool/promesa {:mvn/version "4.0.0"}
                         reagent/reagent {:mvn/version "1.0.0-alpha2"}}}
+
+  :client-dev {:extra-paths ["target"]
+               :main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]
+               :extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.11"}}}
+
   :server {:main-opts ["-m" "todo.server"]
-           :extra-deps {
-                        ring/ring-core {:mvn/version "1.8.1"}
+           :extra-deps {ring/ring-core {:mvn/version "1.8.1"}
                         ring/ring-devel {:mvn/version "1.8.1"}
                         ring/ring-jetty-adapter {:mvn/version "1.8.1"}
                         ring-cors/ring-cors {:mvn/version "0.1.13"}
