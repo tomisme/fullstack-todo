@@ -37,6 +37,14 @@
 (def all-items-query
   ["SELECT * FROM items"])
 
+(def create-table-query ["
+CREATE TABLE IF NOT EXISTS items (
+  id serial,
+  title text,
+  description text,
+  complete boolean DEFAULT false
+)"])
+
 (defn all-items-response []
   (edn-response (ex! all-items-query)))
 
@@ -86,6 +94,7 @@
                 :join? false})))
 
 (defn -main []
+  (ex! create-table-query)
   (reset! server (serve)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,7 +105,7 @@
 #_(.start @server)
 
 #_(ex! ["
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
   id serial,
   title text,
   description text,
