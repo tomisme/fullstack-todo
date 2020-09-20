@@ -26,3 +26,5 @@ Next up we need an HTTP server. I've used yada and other libraries from the JUXT
 Now we've got a simple Jetty server going, with wrap-reload so we can make changes to the routes without reloading the server.
 
 Now we need a way to communicate data to and from the client. We're going to be using Clojure on both the front and back ends so it would be nice to not have to convert to/from JSON. Transit seems overkill, let's just print/read EDN.
+
+Re-frame seems overkill on the client, let's use plain Reagent and js/fetch.

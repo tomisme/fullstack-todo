@@ -1,6 +1,6 @@
 (ns todo.server
  (:require
-  [compojure.core :refer [defroutes GET]]
+  [compojure.core :refer [defroutes GET DELETE POST PUT]]
   [compojure.handler :as handler]
   [compojure.route :as route]
   [next.jdbc :as jdbc]
@@ -9,6 +9,7 @@
   [ring.adapter.jetty :refer [run-jetty]]
   [ring.middleware.reload :refer [wrap-reload]]
   [ring.middleware.cors :refer [wrap-cors]]
+  [ring.middleware.edn :refer [wrap-edn-params]]
   [ring.util.response :refer [resource-response content-type]]))
 
 (specs/instrument)
@@ -33,13 +34,47 @@
   (content-type (resource-response "index.html" {:root "public"})
                 "text/html"))
 
+(def all-items-query
+  ["SELECT * FROM items"])
+
+(defn all-items-response []
+  (edn-response (ex! all-items-query)))
+
 (defroutes routes
   (GET "/" [] index-response)
-  (GET "/items" [] (edn-response (ex! ["SELECT * FROM items"])))
+
+  (GET "/items" [] (all-items-response))
+
+  (POST "/items" {:keys [edn-params]}
+        (let [{:keys [items/title items/description]} edn-params]
+          (sql/insert! ds :items
+                       {:items/title title
+                        :items/description description})
+          (all-items-response)))
+
+  (DELETE "/item/:id" [id]
+          (do
+            (sql/delete! ds :items
+                         {:items/id (Integer/parseInt id)})
+            (all-items-response)))
+
+  (PUT "/item/:id" {:keys [edn-params]}
+       (let [{:keys [items/id
+                     items/title
+                     items/description
+                     items/complete]} edn-params]
+         (sql/update! ds :items
+                      {:items/title title
+                       :items/description description
+                       :items/complete complete}
+                      {:items/id id})
+         (all-items-response)))
+
   (route/not-found "Nothing here!"))
 
 (def app (-> routes
              handler/site
+             wrap-edn-params
              (wrap-cors :access-control-allow-origin [#".*localhost.*"]
                         :access-control-allow-methods [:get :put :post :delete])))
 
@@ -62,7 +97,8 @@
 CREATE TABLE items (
   id serial,
   title text,
-  description text
+  description text,
+  complete boolean DEFAULT false
 )
 "])
 #_(ex! ["
@@ -78,3 +114,4 @@ INSERT INTO items (
 #_(sql/get-by-id ds :items 2)
 #_(sql/insert! ds :items {:title "Cook eggs"
                           :description "scrambled"})
+#_(sql/delete! ds :items {:items/id 1})
